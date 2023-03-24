@@ -21,7 +21,9 @@
               :key="index"
               class="nav-item"
             >
-              <a class="nav-link" :href="'#' + category">{{ category }}</a>
+              <router-link :to="`/category/${category}`" class="nav-link">
+                {{ category }}
+              </router-link>
             </li>
           </ul>
           <form class="form-inline my-2 my-lg-0 mx-auto">

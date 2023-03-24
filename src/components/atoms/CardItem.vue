@@ -13,11 +13,17 @@
       <p class="card-text description-ellipsis">
         {{ item?.description }}
       </p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
+      <StarRating :rating="item.rating.rate" />
+      <div class="d-flex align-items-center">
+        <p class="item-price">{{ formatCurrency(item.price) }}</p>
+        <a href="#" class="btn btn-primary ml-auto">Add to cart</a>
+      </div>
     </div>
   </div>
 </template>
 <script>
+import formatCurrency from "@/utils/formatCurrency";
+import StarRating from "@/components/atoms/StarRating.vue";
 export default {
   name: "CardItem",
   props: ["item"],
@@ -25,6 +31,12 @@ export default {
     return {
       fixedImageHeight: 180,
     };
+  },
+  methods: {
+    formatCurrency,
+  },
+  components: {
+    StarRating,
   },
 };
 </script>
@@ -34,6 +46,7 @@ export default {
 }
 .card {
   margin-top: 1rem;
+  padding: 0.5rem;
 }
 .card-title {
   white-space: nowrap;
@@ -43,6 +56,10 @@ export default {
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.item-price {
+  margin: 0;
 }
 
 .description-ellipsis {
