@@ -1,10 +1,11 @@
 <template>
-  <div class="card" style="">
+  <div class="card">
     <div class="embed-responsive embed-responsive-16by9">
       <img
         class="card-img-top embed-responsive-item"
         :src="item.image"
-        alt="Card image cap"
+        :alt="item.title"
+        :style="{ height: fixedImageHeight + 'px' }"
       />
     </div>
     <div class="card-body">
@@ -20,14 +21,24 @@
 export default {
   name: "CardItem",
   props: ["item"],
+  data() {
+    return {
+      fixedImageHeight: 180,
+    };
+  },
 };
 </script>
 <style scoped>
 .card-img-top {
-  object-fit: cover;
+  object-fit: contain;
 }
 .card {
   margin-top: 1rem;
+}
+.card-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .capitalize {
@@ -38,6 +49,5 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-height: 80px;
 }
 </style>
