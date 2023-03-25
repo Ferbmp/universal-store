@@ -37,7 +37,7 @@
               type="search"
               placeholder="Search products"
               aria-label="Search"
-              @input="searchProducts"
+              @input="debounceSearchProducts"
             />
             <div
               v-if="searchResults.length"
@@ -72,7 +72,6 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
-
 export default {
   name: "AppHeader",
 
@@ -80,6 +79,7 @@ export default {
     return {
       searchQuery: "",
       searchResults: [],
+      debounceTimer: null,
     };
   },
   computed: {
@@ -90,21 +90,24 @@ export default {
     ...mapGetters(["cartQuantity", "productsLoaded"]),
   },
   methods: {
-    ...mapActions(["loadCategories"]),
+    ...mapActions(["loadCategories", "loadProducts"]),
     redirectToProduct(id) {
       this.$router.push({ name: "ProductView", params: { id: id } });
     },
-    searchProducts() {
-      if (this.searchQuery.trim() === "") {
-        this.searchResults = [];
-        return;
-      }
+    debounceSearchProducts() {
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = setTimeout(() => {
+        if (this.searchQuery.trim() === "") {
+          this.searchResults = [];
+          return;
+        }
 
-      this.searchResults = this.products.filter((product) =>
-        product.title
-          .toLowerCase()
-          .includes(this.searchQuery.trim().toLowerCase())
-      );
+        this.searchResults = this.products.filter((product) =>
+          product.title
+            .toLowerCase()
+            .includes(this.searchQuery.trim().toLowerCase())
+        );
+      }, 400);
     },
     closeSearchResults(event) {
       if (
