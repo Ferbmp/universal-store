@@ -9,26 +9,35 @@
           class="card-img-top embed-responsive-item"
           :src="item.image"
           :alt="item.title"
-          :style="{ height: fixedImageHeight + 'px' }"
         />
       </div>
+
       <div class="card-body">
         <h5 class="card-title capitalize">{{ item.title }}</h5>
         <p class="card-text description-ellipsis">
           {{ item?.description }}
         </p>
+
         <StarRating :rating="item.rating.rate" />
         <div class="d-flex align-items-center">
           <p class="item-price">{{ formatCurrency(item.price) }}</p>
-          <a href="#" class="btn btn-primary ml-auto">Add to cart</a>
+          <button
+            class="btn btn-primary ml-auto"
+            @click.prevent="addToCart(item)"
+          >
+            Add to cart
+          </button>
         </div>
       </div>
     </div>
   </router-link>
 </template>
+
 <script>
+import { useStore } from "vuex";
 import formatCurrency from "@/utils/formatCurrency";
 import StarRating from "@/components/atoms/StarRating.vue";
+
 export default {
   name: "CardItem",
   props: ["item"],
@@ -40,11 +49,21 @@ export default {
   methods: {
     formatCurrency,
   },
+  setup() {
+    const store = useStore();
+    const addToCart = (product) => {
+      store.dispatch("addToCart", { product, quantity: 1 });
+
+      console.table(store.state.cartItems);
+    };
+    return { addToCart };
+  },
   components: {
     StarRating,
   },
 };
 </script>
+
 <style scoped>
 .card-img-top {
   object-fit: contain;
@@ -52,10 +71,13 @@ export default {
 .card {
   margin-top: 1rem;
   padding: 0.5rem;
-  max-width: 300px;
-  max-height: 350px;
+  max-width: 280px;
+  max-height: 340px;
   border-radius: 12px;
   transition: box-shadow 0.5s ease-out;
+}
+.embed-responsive {
+  margin-top: 0.5rem;
 }
 
 .card:hover {
@@ -70,11 +92,15 @@ export default {
 .capitalize {
   text-transform: capitalize;
 }
+
 .router-link {
   text-decoration: none;
   text-transform: none;
   color: unset;
+  margin: 0;
+  padding: 0;
 }
+
 .item-price {
   margin: 0;
 }

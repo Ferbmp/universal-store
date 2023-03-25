@@ -1,7 +1,7 @@
 <template>
   <div>
-    <loading-spinner v-if="!product"></loading-spinner>
-    <div class="container my-5" v-if="product">
+    <loading-spinner v-if="!product || !cartInitialized"></loading-spinner>
+    <div class="container my-5" v-if="product && cartInitialized">
       <div class="row">
         <div class="col-md-6">
           <img
@@ -24,10 +24,9 @@
               id="quantity-input"
               v-model="quantity"
               min="1"
-              max="10"
             />
           </div>
-          <button class="btn btn-primary" @click="addToCart">
+          <button class="btn btn-primary" @click="addToCartHandler">
             Add to cart
           </button>
         </div>
@@ -40,6 +39,7 @@
 import { getSingleProduct } from "@/api.js";
 import formatCurrency from "@/utils/formatCurrency";
 import LoadingSpinner from "@/components/atoms/LoadingSpinner.vue";
+import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "ProductView",
@@ -47,17 +47,40 @@ export default {
     return {
       product: null,
       quantity: 1,
+      cartInitialized: false,
     };
   },
+  computed: {
+    ...mapGetters(["cartItems"]),
+    cartItem() {
+      if (this.product) {
+        return this.cartItems?.find(
+          (item) => item.product.id === this.product.id
+        );
+      }
+      return null;
+    },
+  },
+
   async mounted() {
     const productId = this.$route.params.id;
     this.product = await getSingleProduct(productId);
+    this.cartInitialized = true;
+    if (this.cartItem) {
+      this.quantity = this.cartItem.quantity;
+    }
   },
   methods: {
+    ...mapActions(["addToCart", "removeFromCart"]),
     formatCurrency,
-    addToCart() {
-      // Add the product to the cart with the selected quantity
-      // You can implement this logic in a Vuex store or any other state management solution of your choice
+    addToCartHandler() {
+      if (this.cartItem) {
+        this.removeFromCart({ product: this.cartItem.product });
+      }
+      this.addToCart({
+        product: this.product,
+        quantity: parseInt(this.quantity),
+      });
       console.log(`Added ${this.quantity} ${this.product.title} to cart`);
     },
   },
@@ -66,7 +89,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 img {
   max-height: 400px;
