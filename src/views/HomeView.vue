@@ -15,7 +15,7 @@
 </template>
 <script>
 import { getProducts } from "@/api.js";
-import CardItem from "@/components/atoms/CardItem.vue";
+import CardItem from "@/components/molecules/CardItem.vue";
 
 export default {
   name: "HomeView",

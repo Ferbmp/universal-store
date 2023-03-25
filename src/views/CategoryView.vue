@@ -28,7 +28,7 @@
 
 <script>
 import { getProductsInCategory } from "@/api.js";
-import CardItem from "@/components/atoms/CardItem.vue";
+import CardItem from "@/components/molecules/CardItem.vue";
 import LoadingSpinner from "@/components/atoms/LoadingSpinner.vue";
 import BaseSelect from "@/components/atoms/BaseSelect.vue";
 

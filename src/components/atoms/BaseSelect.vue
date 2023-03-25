@@ -7,7 +7,7 @@
       :id="name"
       v-model="selectedValue"
     >
-      <option value="" disabled>Selecione uma opção</option>
+      <option value="" disabled>Select a option</option>
       <option
         v-for="option in options"
         :key="option.value"
