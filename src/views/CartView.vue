@@ -1,6 +1,6 @@
 <template>
   <div class="container mt-4">
-    <h1 class="mb-4">Carrinho</h1>
+    <h1 class="mb-4">Cart</h1>
     <div v-if="cartItems.length === 0" class="alert alert-info">
       Seu carrinho está vazio.
     </div>

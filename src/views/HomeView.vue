@@ -14,28 +14,24 @@
   </div>
 </template>
 <script>
-import { getProducts } from "@/api.js";
 import CardItem from "@/components/molecules/CardItem.vue";
-
+import { mapActions, mapState, mapGetters } from "vuex";
 export default {
   name: "HomeView",
-  data() {
-    return {
-      products: [],
-    };
+  computed: {
+    ...mapState({
+      products: (state) => state.products,
+    }),
+
+    ...mapGetters(["productsLoaded"]),
+  },
+  created() {
+    if (!this.productsLoaded) {
+      this.loadProducts();
+    }
   },
   methods: {
-    async loadProducts() {
-      try {
-        const products = await getProducts();
-        this.products = products;
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      }
-    },
-  },
-  mounted() {
-    this.loadProducts();
+    ...mapActions(["loadProducts"]),
   },
   components: {
     CardItem,

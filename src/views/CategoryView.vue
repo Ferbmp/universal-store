@@ -57,10 +57,7 @@ export default {
       this.isLoading = false;
     },
     handleSortChange(event) {
-      console.log("Sort option changed:", event);
       this.sortBy = event.target.value;
-
-      console.log("sortBy", this.sortBy);
     },
   },
   watch: {

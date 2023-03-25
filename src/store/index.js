@@ -1,4 +1,5 @@
 import { createStore } from "vuex";
+import { getProducts, getCategories } from "@/api.js";
 
 function saveToLocalStorage(cartItems) {
   localStorage.setItem("cartItems", JSON.stringify(cartItems));
@@ -13,9 +14,19 @@ export default createStore({
   state() {
     return {
       cartItems: loadFromLocalStorage(),
+      products: [],
+      categories: [],
+      productsLoaded: false,
     };
   },
   mutations: {
+    setProducts(state, products) {
+      state.products = products;
+      state.productsLoaded = true;
+    },
+    setCategories(state, categories) {
+      state.categories = categories;
+    },
     addToCart(state, payload) {
       const cartItem = state.cartItems.find(
         (item) => item.product.id === payload.product.id
@@ -46,6 +57,22 @@ export default createStore({
     },
   },
   actions: {
+    async loadCategories({ commit }) {
+      try {
+        const categories = await getCategories();
+        commit("setCategories", categories);
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    },
+    async loadProducts({ commit }) {
+      try {
+        const products = await getProducts();
+        commit("setProducts", products);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      }
+    },
     addToCart({ commit }, payload) {
       commit("addToCart", payload);
     },
@@ -71,6 +98,9 @@ export default createStore({
     },
     cartQuantity(state) {
       return state.cartItems.length;
+    },
+    productsLoaded(state) {
+      return state.productsLoaded;
     },
   },
 });

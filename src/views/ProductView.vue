@@ -64,16 +64,27 @@ export default {
   },
 
   async mounted() {
-    const productId = this.id;
-    this.product = await getSingleProduct(productId);
-    this.cartInitialized = true;
-    if (this.cartItem) {
-      this.quantity = this.cartItem.quantity;
-    }
+    this.loadProduct();
   },
+
+  watch: {
+    async id() {
+      this.cartInitialized = false;
+      await this.loadProduct();
+    },
+  },
+
   methods: {
     ...mapActions(["addToCart", "removeFromCart"]),
     formatCurrency,
+    async loadProduct() {
+      const productId = this.id;
+      this.product = await getSingleProduct(productId);
+      this.cartInitialized = true;
+      if (this.cartItem) {
+        this.quantity = this.cartItem.quantity;
+      }
+    },
     addToCartHandler() {
       if (this.cartItem) {
         this.removeFromCart({ product: this.cartItem.product });
@@ -82,7 +93,6 @@ export default {
         product: this.product,
         quantity: parseInt(this.quantity),
       });
-      console.log(`Added ${this.quantity} ${this.product.title} to cart`);
     },
   },
   components: {

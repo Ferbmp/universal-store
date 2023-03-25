@@ -71,43 +71,28 @@
 </template>
 
 <script>
-import { getCategories, getProducts } from "@/api.js";
-import { mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
+
 export default {
   name: "AppHeader",
 
   data() {
     return {
-      categories: [],
       searchQuery: "",
       searchResults: [],
-      products: [],
     };
   },
   computed: {
-    ...mapGetters(["cartQuantity"]),
+    ...mapState({
+      categories: (state) => state.categories,
+      products: (state) => state.products,
+    }),
+    ...mapGetters(["cartQuantity", "productsLoaded"]),
   },
   methods: {
+    ...mapActions(["loadCategories"]),
     redirectToProduct(id) {
       this.$router.push({ name: "ProductView", params: { id: id } });
-
-      this.loadProducts();
-    },
-    async loadCategories() {
-      try {
-        const categories = await getCategories();
-        this.categories = categories;
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      }
-    },
-    async loadProducts() {
-      try {
-        const products = await getProducts();
-        this.products = products;
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-      }
     },
     searchProducts() {
       if (this.searchQuery.trim() === "") {
@@ -133,9 +118,7 @@ export default {
 
   mounted() {
     document.addEventListener("click", this.closeSearchResults);
-
     this.loadCategories();
-    this.loadProducts();
   },
 
   beforeUnmount() {
@@ -143,7 +126,6 @@ export default {
   },
 };
 </script>
-
 <style>
 .nav-item {
   text-transform: capitalize;
@@ -154,8 +136,14 @@ export default {
 .badge-circle {
   position: absolute;
   left: 24px;
+  width: 24px;
   border-radius: 50%;
-  padding: 0.3rem 0.3rem;
+  height: 24px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  top: 4px;
 }
 .cart-icon {
   font-size: 1.8rem;
