@@ -43,6 +43,7 @@ import { mapActions, mapGetters } from "vuex";
 
 export default {
   name: "ProductView",
+  props: ["id"],
   data() {
     return {
       product: null,
@@ -63,7 +64,7 @@ export default {
   },
 
   async mounted() {
-    const productId = this.$route.params.id;
+    const productId = this.id;
     this.product = await getSingleProduct(productId);
     this.cartInitialized = true;
     if (this.cartItem) {

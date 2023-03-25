@@ -26,29 +26,36 @@
               </router-link>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0 mx-auto position-relative">
+          <div
+            ref="searchWrapper"
+            class="d-flex flex-grow-1 align-items-center search-wrapper"
+          >
             <input
-              class="form-control mr-sm-2"
+              ref="searchInput"
+              v-model="searchQuery"
+              class="form-control flex-grow-1 search-input"
               type="search"
               placeholder="Search products"
               aria-label="Search"
-              v-model="searchQuery"
               @input="searchProducts"
             />
             <div
-              class="search-results-container border mt-2"
-              v-if="searchResults.length > 0"
+              v-if="searchResults.length"
+              ref="searchResults"
+              class="search-results"
             >
-              <router-link
-                v-for="(result, index) in searchResults"
-                :key="index"
-                :to="{ name: 'ProductView', params: { id: result.id } }"
-                class="search-result-item"
-              >
-                {{ result.title }}
-              </router-link>
+              <ul class="list-group">
+                <li
+                  v-for="(result, index) in searchResults"
+                  :key="index"
+                  class="list-group-item"
+                  @click="redirectToProduct(result.id)"
+                >
+                  {{ result.title }}
+                </li>
+              </ul>
             </div>
-          </form>
+          </div>
           <div class="navbar-nav">
             <router-link to="/cart" class="nav-item nav-link">
               <i class="bi bi-cart cart-icon"></i>
@@ -66,9 +73,9 @@
 <script>
 import { getCategories, getProducts } from "@/api.js";
 import { mapGetters } from "vuex";
-
 export default {
   name: "AppHeader",
+
   data() {
     return {
       categories: [],
@@ -81,6 +88,11 @@ export default {
     ...mapGetters(["cartQuantity"]),
   },
   methods: {
+    redirectToProduct(id) {
+      this.$router.push({ name: "ProductView", params: { id: id } });
+
+      this.loadProducts();
+    },
     async loadCategories() {
       try {
         const categories = await getCategories();
@@ -109,10 +121,25 @@ export default {
           .includes(this.searchQuery.trim().toLowerCase())
       );
     },
+    closeSearchResults(event) {
+      if (
+        this.$refs.searchWrapper &&
+        !this.$refs.searchWrapper.contains(event.target)
+      ) {
+        this.searchResults = [];
+      }
+    },
   },
+
   mounted() {
+    document.addEventListener("click", this.closeSearchResults);
+
     this.loadCategories();
     this.loadProducts();
+  },
+
+  beforeUnmount() {
+    document.removeEventListener("click", this.closeSearchResults);
   },
 };
 </script>
@@ -134,23 +161,28 @@ export default {
   font-size: 1.8rem;
 }
 
-.search-results-container {
+.form-inline {
+  position: relative;
+}
+.search-wrapper {
+  position: relative;
+}
+.search-results {
+  position: absolute;
   background-color: white;
-  max-height: 200px;
-  overflow-y: auto;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
   width: 100%;
   z-index: 1000;
+  top: 30px;
+  max-height: 440px;
+  overflow-y: auto;
 }
-
-.search-result-item {
-  display: block;
-  padding: 8px;
-  text-decoration: none;
-  color: black;
+.list-group-item {
+  cursor: pointer;
 }
-
-.search-result-item:hover {
+.list-group-item:hover {
   background-color: #f8f9fa;
-  text-decoration: none;
 }
 </style>
