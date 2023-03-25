@@ -75,8 +75,8 @@ export default {
   },
 
   methods: {
-    ...mapActions(["addToCart", "removeFromCart"]),
     formatCurrency,
+    ...mapActions(["addToCart", "removeFromCart", "updateCartItemQuantity"]),
     async loadProduct() {
       const productId = this.id;
       this.product = await getSingleProduct(productId);
@@ -86,13 +86,23 @@ export default {
       }
     },
     addToCartHandler() {
-      if (this.cartItem) {
-        this.removeFromCart({ product: this.cartItem.product });
-      }
-      this.addToCart({
-        product: this.product,
+      const newCartItem = {
+        product: { ...this.product },
         quantity: parseInt(this.quantity),
-      });
+      };
+
+      const cartItemIndex = this.cartItems.findIndex(
+        (item) => item.product.id === newCartItem.product.id
+      );
+
+      if (cartItemIndex > -1) {
+        this.updateCartItemQuantity({
+          product: newCartItem.product,
+          quantity: newCartItem.quantity,
+        });
+      } else {
+        this.addToCart(newCartItem);
+      }
     },
   },
   components: {

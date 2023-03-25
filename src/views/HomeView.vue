@@ -1,6 +1,10 @@
 <template>
   <div class="home">
-    <div class="container">
+    <HomeBanner />
+    <div v-if="!productsLoaded">
+      <LoadingSpinner />
+    </div>
+    <div class="container" v-if="productsLoaded">
       <div class="row">
         <div
           v-for="product in products"
@@ -13,8 +17,11 @@
     </div>
   </div>
 </template>
+
 <script>
 import CardItem from "@/components/molecules/CardItem.vue";
+import HomeBanner from "@/components/molecules/HomeBanner.vue";
+import LoadingSpinner from "@/components/atoms/LoadingSpinner.vue";
 import { mapActions, mapState, mapGetters } from "vuex";
 export default {
   name: "HomeView",
@@ -22,7 +29,6 @@ export default {
     ...mapState({
       products: (state) => state.products,
     }),
-
     ...mapGetters(["productsLoaded"]),
   },
   created() {
@@ -35,7 +41,10 @@ export default {
   },
   components: {
     CardItem,
+    HomeBanner,
+    LoadingSpinner,
   },
 };
 </script>
+
 <style></style>
