@@ -62,7 +62,7 @@ export default createStore({
         const categories = await getCategories();
         commit("setCategories", categories);
       } catch (error) {
-        console.error("Failed to fetch categories:", error);
+        alert("Failed to fetch categories:", error);
       }
     },
     async loadProducts({ commit }) {
@@ -70,7 +70,7 @@ export default createStore({
         const products = await getProducts();
         commit("setProducts", products);
       } catch (error) {
-        console.error("Failed to fetch products:", error);
+        alert("Failed to fetch products:", error);
       }
     },
     addToCart({ commit }, payload) {
