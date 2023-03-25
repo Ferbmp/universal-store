@@ -71,7 +71,7 @@ export default {
 .card {
   margin-top: 1rem;
   padding: 0.5rem;
-  max-width: 280px;
+  max-width: 320px;
   max-height: 340px;
   border-radius: 12px;
   transition: box-shadow 0.5s ease-out;
