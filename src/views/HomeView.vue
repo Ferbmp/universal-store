@@ -5,7 +5,7 @@
         <div
           v-for="product in products"
           :key="product.id"
-          class="col-xl-4 col-md-6 col-12"
+          class="col-xl-4 col-md-6 col-12 d-flex justify-content-center align-items-center"
         >
           <CardItem :item="product" />
         </div>

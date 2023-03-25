@@ -17,7 +17,7 @@
         <div
           v-for="product in sortedProducts"
           :key="product.id"
-          class="col-xl-4 col-md-6 col-12 pt-3 d-flex"
+          class="col-xl-4 col-md-6 col-12 pt-3 d-flex justify-content-center align-items-center"
         >
           <CardItem :item="product" />
         </div>

@@ -145,6 +145,12 @@ export default {
   display: flex;
   top: 4px;
 }
+
+@media (max-width: 960px) {
+  .badge-circle {
+    left: 18px;
+  }
+}
 .cart-icon {
   font-size: 1.8rem;
 }
