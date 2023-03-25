@@ -2,7 +2,7 @@
   <div class="container mt-4">
     <h1 class="mb-4">Cart</h1>
     <div v-if="cartItems.length === 0" class="alert alert-info">
-      Seu carrinho está vazio.
+      Your cart is empty
     </div>
     <div v-else>
       <div class="row">
@@ -49,7 +49,7 @@ export default {
       this.removeFromCart({ product });
     },
     checkout() {
-      alert("Função de finalização do pedido não implementada.");
+      alert("There is no handler to do it");
     },
   },
 };
