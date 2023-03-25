@@ -1,4 +1,4 @@
-# ecommerce-ui
+# Universal Store
 
 ## Project setup
 ```
