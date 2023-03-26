@@ -18,15 +18,20 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav mr-auto">
-            <li
-              v-for="(category, index) in categories"
-              :key="index"
-              class="nav-item"
-            >
-              <router-link :to="`/category/${category}`" class="nav-link">
-                {{ category }}
-              </router-link>
+          <ul class="navbar-nav m-auto">
+            <template v-if="categories.length > 0">
+              <li
+                v-for="(category, index) in categories"
+                :key="index"
+                class="nav-item"
+              >
+                <router-link :to="`/category/${category}`" class="nav-link">
+                  {{ category }}
+                </router-link>
+              </li>
+            </template>
+            <li class="nav-item d-flex" v-else>
+              <LoadingSpinner class="header-spinner" />
             </li>
           </ul>
           <div
@@ -83,6 +88,8 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
+
+import LoadingSpinner from "@/components/atoms/LoadingSpinner.vue";
 export default {
   name: "AppHeader",
 
@@ -92,6 +99,9 @@ export default {
       searchResults: [],
       debounceTimer: null,
     };
+  },
+  components: {
+    LoadingSpinner,
   },
   computed: {
     ...mapState({
@@ -172,11 +182,10 @@ export default {
   top: 4px;
 }
 
-@media (max-width: 960px) {
-  .badge-circle {
-    left: 18px;
-  }
+.header-spinner {
+  margin: 0;
 }
+
 .cart-icon {
   font-size: 1.8rem;
 }
@@ -186,6 +195,7 @@ export default {
 }
 .search-wrapper {
   position: relative;
+  max-width: 480px;
 }
 .search-results {
   position: absolute;
@@ -199,6 +209,7 @@ export default {
   max-height: 440px;
   overflow-y: auto;
 }
+
 .list-group-item {
   cursor: pointer;
 
@@ -213,5 +224,11 @@ export default {
 }
 .list-group-item:hover {
   background-color: #f8f9fa;
+}
+
+@media (max-width: 960px) {
+  .badge-circle {
+    left: 18px;
+  }
 }
 </style>

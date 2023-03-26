@@ -12,7 +12,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .spinner-container {
   display: flex;
   justify-content: center;
