@@ -1,29 +1,38 @@
 # Universal Store
 
-## Project setup
+## Instalação local
 
-```
+Para executar esse projeto em sua máquina siga os passos abaixo
+
+```bash
+# clone o projeto
+git clone https://github.com/Ferbmp/Capputeeno.git
+
+# instale as dependências no diretório do projeto
 npm install
+
+# execute um servidor de desenvolvimento
+npm run dev
 ```
 
-### Compiles and hot-reloads for development
+## Ferramentas usadas
+
+- [`Vue.js`](https://vuejs.org/)
+
+- [`jest`](https://jestjs.io/)
+
+## Estrutura de pastas
 
 ```
-npm run serve
+┣ 📂src    -> código fonte do projeto
+  📦src
+  ┣ 📂components  -> componentes vue
+  ┣ 📂store     -> arquivos de estado global
+  ┣ 📂views       -> páginas
+  ┣ 📂utils    -> funções utilitárias
+┣ 📂tests    -> testes unitários
 ```
 
-### Compiles and minifies for production
-
-```
-npm run build
 ```
 
-### Lints and fixes files
-
 ```
-npm run lint
-```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
