@@ -6,7 +6,7 @@ Para executar esse projeto em sua máquina siga os passos abaixo
 
 ```bash
 # clone o projeto
-git clone https://github.com/Ferbmp/Capputeeno.git
+git clone https://github.com/Ferbmp/universal-store.git
 
 # instale as dependências no diretório do projeto
 npm install
