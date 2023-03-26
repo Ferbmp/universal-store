@@ -32,7 +32,6 @@
     "eslint-plugin-vue": "^8.0.3",
     "jest": "^27.0.5",
     "vue-template-compiler": "^2.7.14",
-    "vuex-mock-store": "^0.0.8"
   },
   "eslintConfig": {
     "root": true,
