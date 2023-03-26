@@ -12,7 +12,7 @@ git clone https://github.com/Ferbmp/universal-store.git
 npm install
 
 # execute um servidor de desenvolvimento
-npm run dev
+npm run serve
 ```
 
 ## Ferramentas usadas
