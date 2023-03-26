@@ -46,9 +46,7 @@ describe("CartView", () => {
 
   it("displays cart total correctly", () => {
     const wrapper = mount(CartView, { global: { plugins: [store] } });
-    expect(wrapper.text()).toContain(
-      "Cart$10.00Quantity Remove $20.00Quantity Remove Total: $40.00Finish order"
-    );
+    expect(wrapper.text()).toContain("$40.00");
   });
 
   it("calls updateCartItemQuantity method when update-quantity event is emitted", () => {

@@ -7,7 +7,7 @@ import CartView from "@/views/CartView.vue";
 const routes = [
   {
     path: "/",
-    name: "home",
+    name: "Home",
     component: HomeView,
   },
   {
@@ -17,7 +17,7 @@ const routes = [
   },
   {
     path: "/products/:id",
-    name: "ProductView",
+    name: "Product",
     component: ProductView,
     props: true,
   },

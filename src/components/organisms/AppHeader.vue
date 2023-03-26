@@ -2,7 +2,10 @@
   <header>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container">
-        <a class="navbar-brand" href="/">Universal Store</a>
+        <router-link :to="{ name: 'Home' }" class="navbar-brand">
+          Universal Store
+        </router-link>
+
         <button
           class="navbar-toggler"
           type="button"
@@ -51,7 +54,15 @@
                   class="list-group-item"
                   @click="redirectToProduct(result.id)"
                 >
-                  {{ result.title }}
+                  <img
+                    :src="result.image"
+                    :alt="result.title"
+                    class="result-image"
+                  />
+
+                  <p>
+                    {{ result.title }}
+                  </p>
                 </li>
               </ul>
             </div>
@@ -92,7 +103,8 @@ export default {
   methods: {
     ...mapActions(["loadCategories", "loadProducts"]),
     redirectToProduct(id) {
-      this.$router.push({ name: "ProductView", params: { id: id } });
+      this.searchResults = [];
+      this.$router.push({ name: "Product", params: { id: id } });
     },
     debounceSearchProducts() {
       clearTimeout(this.debounceTimer);
@@ -126,6 +138,17 @@ export default {
 
   beforeUnmount() {
     document.removeEventListener("click", this.closeSearchResults);
+  },
+
+  watch: {
+    $route() {
+      this.searchQuery = "";
+      this.searchResults = [];
+
+      if (!this.productsLoaded && this.$route.name !== "Home") {
+        this.loadProducts();
+      }
+    },
   },
 };
 </script>
@@ -178,6 +201,15 @@ export default {
 }
 .list-group-item {
   cursor: pointer;
+
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.result-image {
+  widows: 100%;
+  max-width: 50px;
+  margin-right: 1rem;
 }
 .list-group-item:hover {
   background-color: #f8f9fa;

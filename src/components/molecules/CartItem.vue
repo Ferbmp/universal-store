@@ -2,7 +2,7 @@
   <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
     <div class="card h-100">
       <router-link
-        :to="{ name: 'ProductView', params: { id: product.id } }"
+        :to="{ name: 'Product', params: { id: product.id } }"
         class="router-link"
       >
         <img

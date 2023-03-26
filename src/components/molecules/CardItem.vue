@@ -1,6 +1,6 @@
 <template>
   <router-link
-    :to="{ name: 'ProductView', params: { id: item.id } }"
+    :to="{ name: 'Product', params: { id: item.id } }"
     class="router-link"
   >
     <div class="card">

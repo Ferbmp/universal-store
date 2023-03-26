@@ -51,10 +51,14 @@ export default {
   methods: {
     async fetchProducts() {
       this.isLoading = true;
-      const response = await getProductsInCategory(this.category);
-
-      this.products = response;
-      this.isLoading = false;
+      try {
+        const response = await getProductsInCategory(this.category);
+        this.products = response;
+        this.isLoading = false;
+      } catch (err) {
+        alert(err);
+        this.isLoading = false;
+      }
     },
     handleSortChange(event) {
       this.sortBy = event.target.value;
@@ -64,9 +68,6 @@ export default {
     $route(to) {
       this.category = to.params.selectedCategory;
       this.fetchProducts();
-    },
-    sortBy() {
-      console.log("sorting products");
     },
   },
   mounted() {
