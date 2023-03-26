@@ -1,7 +1,13 @@
 import { mount } from "@vue/test-utils";
 import { createStore } from "vuex";
 import CartView from "@/views/CartView.vue";
+
 import CartItem from "@/components/molecules/CartItem.vue";
+
+const RouterLinkStub = {
+  name: "RouterLink",
+  template: "<div><slot /></div>",
+};
 
 describe("CartView", () => {
   let actions;
@@ -27,7 +33,10 @@ describe("CartView", () => {
   });
 
   it("displays cart items correctly", () => {
-    const wrapper = mount(CartView, { global: { plugins: [store] } });
+    const wrapper = mount(CartView, {
+      global: { plugins: [store] },
+      components: { RouterLink: RouterLinkStub },
+    });
     const cartItemWrappers = wrapper.findAllComponents(CartItem);
     expect(cartItemWrappers.length).toBe(2);
     expect(cartItemWrappers.at(0).props("product")).toEqual({
