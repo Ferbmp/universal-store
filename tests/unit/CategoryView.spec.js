@@ -78,7 +78,6 @@ describe("CategoryView.vue", () => {
         },
       },
     });
-    console.log("Category value:", wrapper.vm.category); // Add this line
 
     expect(wrapper.find(".category-title").text()).toContain(
       `${selectedCategory} Products`

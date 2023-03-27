@@ -5,7 +5,7 @@ import CartView from "@/views/CartView.vue";
 import CartItem from "@/components/molecules/CartItem.vue";
 
 const RouterLinkStub = {
-  name: "RouterLink",
+  name: "router-link",
   template: "<div><slot /></div>",
 };
 
@@ -34,8 +34,10 @@ describe("CartView", () => {
 
   it("displays cart items correctly", () => {
     const wrapper = mount(CartView, {
-      global: { plugins: [store] },
-      components: { RouterLink: RouterLinkStub },
+      global: {
+        plugins: [store],
+        components: { "router-link": RouterLinkStub },
+      },
     });
     const cartItemWrappers = wrapper.findAllComponents(CartItem);
     expect(cartItemWrappers.length).toBe(2);
