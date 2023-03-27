@@ -34,45 +34,13 @@
               <LoadingSpinner class="header-spinner" />
             </li>
           </ul>
-          <div
-            ref="searchWrapper"
-            class="d-flex flex-grow-1 align-items-center search-wrapper"
-          >
-            <input
-              ref="searchInput"
-              v-model="searchQuery"
-              class="form-control flex-grow-1 search-input"
-              type="search"
-              placeholder="Search products"
-              aria-label="Search"
-              @input="debounceSearchProducts"
-            />
-            <div
-              v-if="searchResults.length"
-              ref="searchResults"
-              class="search-results"
-            >
-              <ul class="list-group">
-                <li
-                  v-for="(result, index) in searchResults"
-                  :key="index"
-                  class="list-group-item"
-                  @click="redirectToProduct(result.id)"
-                >
-                  <img
-                    :src="result.image"
-                    :alt="result.title"
-                    class="result-image"
-                  />
-
-                  <p>
-                    {{ result.title }}
-                  </p>
-                </li>
-              </ul>
-            </div>
-          </div>
           <div class="navbar-nav">
+            <SearchInput
+              :searchResults="searchResults"
+              @search-input="updateSearchResults"
+              @result-clicked="redirectToProduct"
+              @close-results="closeSearchResults"
+            />
             <router-link to="/cart" class="nav-item nav-link">
               <i class="bi bi-cart cart-icon"></i>
               <span class="badge badge-primary badge-circle">{{
@@ -88,20 +56,20 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from "vuex";
-
 import LoadingSpinner from "@/components/atoms/LoadingSpinner.vue";
+import SearchInput from "@/components/molecules/SearchInput.vue";
+
 export default {
   name: "AppHeader",
 
   data() {
     return {
-      searchQuery: "",
       searchResults: [],
-      debounceTimer: null,
     };
   },
   components: {
     LoadingSpinner,
+    SearchInput,
   },
   computed: {
     ...mapState({
@@ -116,43 +84,27 @@ export default {
       this.searchResults = [];
       this.$router.push({ name: "Product", params: { id: id } });
     },
-    debounceSearchProducts() {
-      clearTimeout(this.debounceTimer);
-      this.debounceTimer = setTimeout(() => {
-        if (this.searchQuery.trim() === "") {
-          this.searchResults = [];
-          return;
-        }
-
-        this.searchResults = this.products.filter((product) =>
-          product.title
-            .toLowerCase()
-            .includes(this.searchQuery.trim().toLowerCase())
-        );
-      }, 400);
-    },
-    closeSearchResults(event) {
-      if (
-        this.$refs.searchWrapper &&
-        !this.$refs.searchWrapper.contains(event.target)
-      ) {
+    updateSearchResults(searchQuery) {
+      if (searchQuery === "") {
         this.searchResults = [];
+        return;
       }
+
+      this.searchResults = this.products.filter((product) =>
+        product.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    },
+    closeSearchResults() {
+      this.searchResults = [];
     },
   },
 
   mounted() {
-    document.addEventListener("click", this.closeSearchResults);
     this.loadCategories();
-  },
-
-  beforeUnmount() {
-    document.removeEventListener("click", this.closeSearchResults);
   },
 
   watch: {
     $route() {
-      this.searchQuery = "";
       this.searchResults = [];
 
       if (!this.productsLoaded && this.$route.name !== "Home") {
@@ -192,38 +144,6 @@ export default {
 
 .form-inline {
   position: relative;
-}
-.search-wrapper {
-  position: relative;
-  max-width: 480px;
-}
-.search-results {
-  position: absolute;
-  background-color: white;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  margin-top: 0.5rem;
-  width: 100%;
-  z-index: 1000;
-  top: 30px;
-  max-height: 440px;
-  overflow-y: auto;
-}
-
-.list-group-item {
-  cursor: pointer;
-
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-.result-image {
-  widows: 100%;
-  max-width: 50px;
-  margin-right: 1rem;
-}
-.list-group-item:hover {
-  background-color: #f8f9fa;
 }
 
 @media (max-width: 960px) {
